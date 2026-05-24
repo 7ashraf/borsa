@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --background: #0d0d0f;
+  --foreground: #e8e8ed;
+  --card: #141416;
+  --card-foreground: #e8e8ed;
+  --border: #2a2a30;
+  --muted: #1a1a20;
+  --muted-foreground: #8c8c9e;
+  --accent: #c9303a;
+  --accent-foreground: #ffffff;
+  --primary: #c9303a;
+  --primary-foreground: #ffffff;
+  --secondary: #1e1e26;
+  --secondary-foreground: #e8e8ed;
+  --ring: #c9303a;
+}
+
+.light {
+  --background: #f8f8fa;
+  --foreground: #0d0d0f;
+  --card: #ffffff;
+  --card-foreground: #0d0d0f;
+  --border: #e2e2e8;
+  --muted: #f0f0f5;
+  --muted-foreground: #6b6b80;
+  --accent: #c9303a;
+  --accent-foreground: #ffffff;
+  --primary: #c9303a;
+  --primary-foreground: #ffffff;
+  --secondary: #f0f0f5;
+  --secondary-foreground: #0d0d0f;
+  --ring: #c9303a;
+}
+
+* {
+  border-color: var(--border);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, pre, .font-mono {
+  font-family: "JetBrains Mono", "Fira Code", ui-monospace, monospace;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--muted);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* Terminal animation */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #e8e8ed 0%, #c9303a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glow effect */
+.glow-accent {
+  box-shadow: 0 0 20px rgba(201, 48, 58, 0.3);
+}
