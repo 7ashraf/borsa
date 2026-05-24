@@ -1,0 +1,37 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "borsa",
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "favicon": "/favicon.svg",
+  "colors": {
+    "primary": "#C8102E",
+    "light": "#FF4D6D",
+    "dark": "#8B0000"
+  },
+  "topbarLinks": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/your-username/borsa"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting started",
+      "pages": ["index", "self-hosting"]
+    },
+    {
+      "group": "Reference",
+      "pages": ["endpoints"]
+    },
+    {
+      "group": "Contributing",
+      "pages": ["adding-a-fetcher"]
+    }
+  ],
+  "footerSocials": {
+    "github": "https://github.com/your-username/borsa"
+  }
+}
