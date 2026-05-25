@@ -1,33 +1,60 @@
 Output docs/assets/demo.gif
 
+Require curl
+Require python3
+
 Set Shell "bash"
-Set FontSize 15
-Set Width 1100
-Set Height 620
-Set Theme "Dracula"
-Set Padding 20
-Set TypingSpeed 40ms
+Set FontSize 16
+Set Width 1180
+Set Height 720
+Set Theme "Catppuccin Mocha"
+Set Padding 28
+Set Margin 12
+Set MarginFill "#11111b"
+Set BorderRadius 10
+Set WindowBar "Colorful"
+Set TypingSpeed 30ms
+
+Hide
+Type "cd /Users/omarelsergany/Projects/borsa"
+Enter
+Type "export PS1='borsa $ '"
+Enter
+Type "curl -s http://localhost:8000/v1/quote/COMI >/dev/null"
+Enter
+Type "clear"
+Enter
+Show
 
 Sleep 500ms
-
-Type "# borsa — EGX market data API"
-Sleep 800ms
+Type "# borsa: self-hosted EGX market data API"
 Enter
-Sleep 400ms
+Sleep 700ms
 
-Type "curl -s localhost:8000/v1/health | jq ."
-Sleep 600ms
+Type "# Start the app with Docker, then call the API:"
 Enter
-Sleep 2s
+Type "# docker compose up --build"
+Enter
+Sleep 1000ms
 
-Type "curl -s localhost:8000/v1/stocks | jq '{count: .count, first: .symbols[0]}'"
-Sleep 600ms
+Type "# python3 -m json.tool only formats the JSON output"
 Enter
-Sleep 2500ms
+Sleep 700ms
 
-Type "curl -s localhost:8000/v1/quote/COMI | jq ."
-Sleep 600ms
+Type "# Check that borsa is running"
 Enter
-Sleep 4s
+Type "curl -s http://localhost:8000/v1/health | python3 -m json.tool"
+Enter
+Sleep 2300ms
+
+Type "# Get one live EGX quote"
+Enter
+Type "curl -s http://localhost:8000/v1/quote/COMI | python3 -m json.tool"
+Enter
+Sleep 4200ms
+
+Type "# Explore the rest at http://localhost:8000/docs"
+Enter
+Sleep 1600ms
 
 Sleep 1s
