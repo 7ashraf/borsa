@@ -105,4 +105,23 @@ jobs:
           DOKPLOY_DEPLOY_URL: ${{ secrets.DOKPLOY_DEPLOY_URL }}
         run: |
           test -n "$DOKPLOY_DEPLOY_URL"
-          curl --fail --show-error --silent "$DOKPLOY_DEPLOY_URL"
+          curl --fail-with-body --show-error --silent \
+            --request POST \
+            --header "Content-Type: application/json" \
+            --header "X-GitHub-Event: push" \
+            --data '{
+              "ref": "refs/heads/main",
+              "repository": { "full_name": "7ashraf/borsa" },
+              "head_commit": {
+                "id": "'"$GITHUB_SHA"'",
+                "message": "Docker image published by GitHub Actions"
+              },
+              "commits": [
+                {
+                  "id": "'"$GITHUB_SHA"'",
+                  "message": "Docker image published by GitHub Actions",
+                  "modified": []
+                }
+              ]
+            }' \
+            "$DOKPLOY_DEPLOY_URL"
