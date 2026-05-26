@@ -105,4 +105,4 @@ jobs:
           DOKPLOY_DEPLOY_URL: ${{ secrets.DOKPLOY_DEPLOY_URL }}
         run: |
           test -n "$DOKPLOY_DEPLOY_URL"
-          curl --fail --show-error --silent --request POST "$DOKPLOY_DEPLOY_URL"
+          curl --fail --show-error --silent "$DOKPLOY_DEPLOY_URL"

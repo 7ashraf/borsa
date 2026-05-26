@@ -14,7 +14,7 @@
   "topbarLinks": [
     {
       "name": "GitHub",
-      "url": "https://github.com/your-username/borsa"
+      "url": "https://github.com/7ashraf/borsa"
     }
   ],
   "navigation": [
@@ -32,6 +32,6 @@
     }
   ],
   "footerSocials": {
-    "github": "https://github.com/your-username/borsa"
+    "github": "https://github.com/7ashraf/borsa"
   }
 }
