@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { BookOpen } from "lucide-react";
 import { GithubIcon } from "./icons";
-
-const GITHUB_URL = "https://github.com/omarelsergany/borsa";
+import { DOCS_URL, GITHUB_URL } from "@/lib/links";
 
 const TERMINAL_LINES = [
   { delay: 0, text: "$ curl https://demo.borsa.ashh.me/demo/quote/COMI", type: "cmd" },
@@ -110,7 +109,7 @@ export function Hero() {
                 View on GitHub
               </a>
               <a
-                href="#docs"
+                href={DOCS_URL}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-md border border-[var(--border)] text-[var(--foreground)] font-medium hover:bg-[var(--muted)] transition-colors"
               >
                 <BookOpen className="w-4 h-4" />

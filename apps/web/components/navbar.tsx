@@ -4,8 +4,7 @@ import { useTheme } from "./theme-provider";
 import { Sun, Moon, Star } from "lucide-react";
 import { GithubIcon } from "./icons";
 import { useState, useEffect } from "react";
-
-const GITHUB_URL = "https://github.com/omarelsergany/borsa";
+import { DOCS_URL, GITHUB_API_URL, GITHUB_URL } from "@/lib/links";
 
 export function Navbar() {
   const { theme, toggle } = useTheme();
@@ -13,7 +12,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    fetch("https://api.github.com/repos/omarelsergany/borsa")
+    fetch(GITHUB_API_URL)
       .then((r) => r.json())
       .then((d) => {
         if (typeof d.stargazers_count === "number") {
@@ -49,7 +48,7 @@ export function Navbar() {
 
         <div className="flex items-center gap-1 sm:gap-2">
           <a
-            href="#docs"
+            href={DOCS_URL}
             className="px-3 py-1.5 text-sm text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-colors"
           >
             Docs

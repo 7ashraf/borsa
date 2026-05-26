@@ -1,13 +1,14 @@
 "use client";
 
 import { SyntaxHighlight } from "./syntax-highlight";
+import { GITHUB_URL } from "@/lib/links";
 
 const STEPS = [
   {
     number: "01",
     title: "Clone the repo",
     description: "Get the code and copy the environment template.",
-    code: `git clone https://github.com/omarelsergany/borsa.git
+    code: `git clone ${GITHUB_URL}.git
 cd borsa
 cp .env.example .env`,
     lang: "bash",

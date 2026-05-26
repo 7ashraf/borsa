@@ -1,6 +1,5 @@
 import { GithubIcon } from "./icons";
-
-const GITHUB_URL = "https://github.com/omarelsergany/borsa";
+import { DOCS_URL, GITHUB_URL } from "@/lib/links";
 
 export function Footer() {
   return (
@@ -30,7 +29,7 @@ export function Footer() {
               GitHub
             </a>
             <a
-              href="#docs"
+              href={DOCS_URL}
               className="hover:text-[var(--foreground)] transition-colors"
             >
               Docs

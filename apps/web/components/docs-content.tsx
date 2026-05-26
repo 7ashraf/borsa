@@ -1,6 +1,7 @@
 "use client";
 
 import { SyntaxHighlight } from "./syntax-highlight";
+import { GITHUB_URL } from "@/lib/links";
 
 const ENDPOINTS = [
   {
@@ -141,7 +142,7 @@ export function DocsContent() {
               <SyntaxHighlight
                 showCopy
                 language="bash"
-                code={`git clone https://github.com/omarelsergany/borsa.git
+                code={`git clone ${GITHUB_URL}.git
 cd borsa
 cp .env.example .env
 # Add at least one provider key to .env

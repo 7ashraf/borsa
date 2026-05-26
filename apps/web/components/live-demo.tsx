@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { BORSA_API_BASE_URL } from "@/lib/config";
+import { GITHUB_URL } from "@/lib/links";
 import { GithubIcon } from "./icons";
 import { SyntaxHighlight } from "./syntax-highlight";
 
@@ -108,7 +109,7 @@ export function LiveDemo() {
         <p className="text-sm text-[var(--muted-foreground)]">
           Want unlimited?{" "}
           <a
-            href="https://github.com/omarelsergany/borsa"
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-[var(--foreground)] underline underline-offset-4 hover:text-[var(--accent)] transition-colors"
