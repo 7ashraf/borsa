@@ -10,7 +10,7 @@ const FAQS = [
   },
   {
     q: "Why BYOK (bring your own keys)?",
-    a: "Provider ToS prohibit reselling or proxying API access. Each user registers their own free-tier accounts directly with Alpha Vantage and Finnhub, ensuring compliance with each provider's terms. Yahoo Finance requires no key.",
+    a: "Provider ToS often prohibit reselling or proxying API access. Each user registers accounts directly with the providers they enable, keeping data usage tied to their own provider agreements. Yahoo Finance requires no key.",
   },
   {
     q: "Can I use it commercially?",
@@ -18,7 +18,7 @@ const FAQS = [
   },
   {
     q: "How do I add a new EGX symbol?",
-    a: "Edit the symbol dictionary in the config and add the provider-specific tickers. See CONTRIBUTING.md on GitHub for the step-by-step guide — it takes about 10 minutes per symbol.",
+    a: "Most of the EGX catalog is already bundled. For a missing symbol, edit the symbol dictionary and add the provider-specific tickers. See CONTRIBUTING.md on GitHub for the step-by-step guide.",
   },
   {
     q: "Why not just use yfinance directly?",

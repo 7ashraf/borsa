@@ -94,8 +94,8 @@ export function Hero() {
             </h1>
 
             <p className="text-lg text-[var(--muted-foreground)] leading-relaxed max-w-lg">
-              Self-hostable. BYOK. One docker command. Unified access to Alpha
-              Vantage, Finnhub, and Yahoo Finance — with automatic fallback.
+              Self-hostable. BYOK. One docker command. Unified access to 200+
+              EGX symbols through configured data providers — with automatic fallback.
             </p>
 
             <div className="flex flex-wrap gap-3">
@@ -120,9 +120,9 @@ export function Hero() {
             <div className="flex items-center gap-6 pt-2 text-sm text-[var(--muted-foreground)]">
               <span className="font-mono">docker compose up</span>
               <span className="w-px h-4 bg-[var(--border)]" />
-              <span>15+ EGX symbols</span>
+              <span>200+ EGX symbols</span>
               <span className="w-px h-4 bg-[var(--border)]" />
-              <span>3 providers</span>
+              <span>provider fallback</span>
             </div>
           </div>
 

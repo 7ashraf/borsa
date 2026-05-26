@@ -245,8 +245,8 @@ docker compose up`}
               <code className="font-mono text-xs bg-[var(--muted)] px-1.5 py-0.5 rounded">
                 StocksService
               </code>{" "}
-              tries providers in order: Yahoo Finance → Alpha Vantage → Finnhub.
-              A provider is skipped if its key is absent or its feature flag is{" "}
+              tries configured providers in order. A provider is skipped if its
+              key is absent or its feature flag is{" "}
               <code className="font-mono text-xs bg-[var(--muted)] px-1.5 py-0.5 rounded">
                 false
               </code>
@@ -262,9 +262,9 @@ docker compose up`}
                 code={`Client → FastAPI → TTL Cache (hit → return)
                               ↓ (miss)
                          StocksService
-                         ├── Alpha Vantage  (if key set, if enabled)
-                         ├── Finnhub        (if key set, if enabled)
-                         └── Yahoo Finance  (always enabled)`}
+                         ├── Provider 1  (if key set, if enabled)
+                         ├── Provider 2  (if key set, if enabled)
+                         └── Provider N  (fallback source)`}
               />
             </div>
           </section>
@@ -275,7 +275,7 @@ docker compose up`}
               EGX Symbols
             </h2>
             <p className="text-[var(--muted-foreground)] text-sm">
-              15+ EGX symbols pre-configured with provider-specific ticker
+              200+ EGX symbols pre-configured with provider-specific ticker
               mappings. Use{" "}
               <code className="font-mono text-xs bg-[var(--muted)] px-1.5 py-0.5 rounded">
                 GET /v1/stocks

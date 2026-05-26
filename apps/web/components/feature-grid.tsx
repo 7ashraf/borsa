@@ -11,12 +11,12 @@ const FEATURES = [
   {
     icon: Layers,
     title: "Multi-provider fallback",
-    body: "Alpha Vantage → Finnhub → Yahoo Finance. If one fails or rate-limits, the next is tried automatically.",
+    body: "Configured providers are tried automatically. If one fails or rate-limits, borsa falls through to the next source.",
   },
   {
     icon: Database,
-    title: "15+ EGX symbols pre-configured",
-    body: "COMI, CIBEA, EAST, ETEL, HRHO, and more. Symbol-to-provider mapping handled for you.",
+    title: "200+ EGX symbols pre-configured",
+    body: "The EGX catalog is bundled with provider-specific ticker mapping handled for you.",
   },
   {
     icon: Zap,

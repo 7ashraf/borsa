@@ -17,7 +17,7 @@ cp .env.example .env`,
     number: "02",
     title: "Add your API keys",
     description:
-      "Get free keys from Alpha Vantage and/or Finnhub. Yahoo Finance needs no key.",
+      "Add keys for the providers you want to enable. Yahoo Finance needs no key.",
     code: `# .env
 ALPHA_VANTAGE_KEY=your_key_here
 FINNHUB_KEY=your_key_here

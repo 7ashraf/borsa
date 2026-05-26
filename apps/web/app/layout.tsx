@@ -11,12 +11,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "borsa — Open-source API for Egyptian Exchange data",
   description:
-    "Self-hostable FastAPI service that unifies Alpha Vantage, Finnhub, and Yahoo Finance into one consistent API for EGX market data. Bring your own keys.",
+    "Self-hostable FastAPI service that unifies configured data providers into one consistent API for 200+ EGX symbols. Bring your own keys.",
   keywords: ["EGX", "Egyptian Exchange", "stock market API", "Alpha Vantage", "Finnhub", "Yahoo Finance", "open source"],
   openGraph: {
     title: "borsa — Open-source API for Egyptian Exchange data",
     description:
-      "Self-hostable. BYOK. One docker command. Unified access to Alpha Vantage, Finnhub, and Yahoo Finance.",
+      "Self-hostable. BYOK. One docker command. Unified access to 200+ EGX symbols.",
     type: "website",
   },
 };
