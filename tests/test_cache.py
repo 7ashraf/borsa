@@ -1,5 +1,3 @@
-import pytest
-
 from borsa.services.cache import TTLCacheService
 
 

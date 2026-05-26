@@ -29,6 +29,38 @@ ports:
   - "3000:8000"   # host:container
 ```
 
+## Pulling the GitHub Actions image
+
+Every push to `main` publishes a Docker image to GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/7ashraf/borsa:latest
+```
+
+On the demo server, run the published image behind your reverse proxy:
+
+```yaml
+services:
+  borsa:
+    image: ghcr.io/7ashraf/borsa:latest
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    restart: unless-stopped
+```
+
+For `https://demo.borsa.ashh.me`, set the API environment to allow the Vercel
+frontend origin:
+
+```dotenv
+CORS_ORIGINS=https://borsa.ashh.me
+CORS_ORIGIN_REGEX=https://.*\.vercel\.app
+```
+
+The regex is optional, but useful if you want Vercel preview deployments to call
+the same demo API.
+
 ## Running with uv
 
 ```bash
@@ -52,13 +84,15 @@ uv run uvicorn borsa.main:app --host 0.0.0.0 --port 8000
 | `HOST` | `0.0.0.0` | Bind address |
 | `PORT` | `8000` | Bind port |
 | `LOG_LEVEL` | `info` | `debug` · `info` · `warning` · `error` |
+| `CORS_ORIGINS` | `*` | Comma-separated browser origins allowed to call the API |
+| `CORS_ORIGIN_REGEX` | _(empty)_ | Optional regex for preview domains, for example Vercel |
 
 ## Reverse proxy (nginx example)
 
 ```nginx
 server {
     listen 80;
-    server_name borsa.example.com;
+    server_name demo.borsa.ashh.me;
 
     location / {
         proxy_pass http://127.0.0.1:8000;
@@ -71,7 +105,7 @@ server {
 ## Health check
 
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:8000/v1/health
 ```
 
 Expected: `{"status":"ok", ...}`

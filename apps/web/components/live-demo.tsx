@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { BORSA_API_BASE_URL } from "@/lib/config";
 import { GithubIcon } from "./icons";
 import { SyntaxHighlight } from "./syntax-highlight";
 
@@ -33,9 +34,7 @@ export function LiveDemo() {
     setError(null);
     setResult(null);
     try {
-      const res = await fetch(
-        `https://api.borsa.ashh.me/demo/quote/${symbol}`
-      );
+      const res = await fetch(`${BORSA_API_BASE_URL}/demo/quote/${symbol}`);
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
     } catch {

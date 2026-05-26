@@ -7,84 +7,52 @@ const TABS = [
   {
     label: "curl",
     language: "bash",
-    code: `# Fetch a quote
-curl https://api.borsa.ashh.me/demo/quote/COMI
+    code: `BASE="https://demo.borsa.ashh.me"
 
-# Response:
-# {
-#   "symbol": "COMI",
-#   "name": "Commercial International Bank",
-#   "price": 45.80,
-#   "open": 45.20,
-#   "high": 46.10,
-#   "low": 45.00,
-#   "previous_close": 45.50,
-#   "change": 0.30,
-#   "change_percent": 0.659,
-#   "volume": 1234567,
-#   "currency": "EGP",
-#   "provider": "yahoo",
-#   "fetched_at": "2025-05-24T10:30:00"
-# }
+# Check the demo API
+curl "$BASE/v1/health"
+
+# Fetch one quote
+curl "$BASE/demo/quote/COMI"
 
 # List all EGX symbols
-curl http://localhost:8000/symbols
-
-# Historical data (daily, last month)
-curl "http://localhost:8000/historical/COMI?interval=daily&period=1mo"`,
+curl "$BASE/v1/stocks"`,
   },
   {
     label: "Python",
     language: "python",
     code: `import requests
 
-BASE = "http://localhost:8000"
+BASE = "https://demo.borsa.ashh.me"
 
 # Fetch a quote
-resp = requests.get(f"{BASE}/quotes/COMI")
+resp = requests.get(f"{BASE}/demo/quote/COMI", timeout=10)
 resp.raise_for_status()
 quote = resp.json()
 
-print(f"{quote['name']}: {quote['price']} {quote['currency']}")
-print(f"Change: {quote['change_percent']:+.2f}%")
-print(f"Source: {quote['provider']}")
+print(f"{quote['company']}: {quote['price']} {quote['currency']}")
+print(f"Source: {quote['source']}")
 
 # List all EGX symbols
-symbols = requests.get(f"{BASE}/symbols").json()
-print(f"Total symbols: {len(symbols)}")
-
-# Historical data
-hist = requests.get(
-    f"{BASE}/historical/COMI",
-    params={"interval": "daily", "period": "1mo"}
-).json()
-for row in hist[-5:]:  # last 5 days
-    print(f"{row['date']}: close={row['close']}")`,
+symbols = requests.get(f"{BASE}/v1/stocks", timeout=10).json()
+print(f"Total symbols: {symbols['count']}")`,
   },
   {
     label: "JavaScript",
     language: "javascript",
-    code: `const BASE = "http://localhost:8000";
+    code: `const BASE = "https://demo.borsa.ashh.me";
 
 // Fetch a quote
-const res = await fetch(\`\${BASE}/quotes/COMI\`);
+const res = await fetch(\`\${BASE}/demo/quote/COMI\`);
 if (!res.ok) throw new Error(\`HTTP \${res.status}\`);
 const quote = await res.json();
 
-console.log(\`\${quote.name}: \${quote.price} \${quote.currency}\`);
-console.log(\`Change: \${quote.change_percent.toFixed(2)}%\`);
-console.log(\`Source: \${quote.provider}\`);
+console.log(\`\${quote.company}: \${quote.price} \${quote.currency}\`);
+console.log(\`Source: \${quote.source}\`);
 
 // List all EGX symbols
-const symbols = await fetch(\`\${BASE}/symbols\`).then(r => r.json());
-console.log(\`Total symbols: \${symbols.length}\`);
-
-// Historical data
-const params = new URLSearchParams({ interval: "daily", period: "1mo" });
-const hist = await fetch(\`\${BASE}/historical/COMI?\${params}\`).then(r => r.json());
-hist.slice(-5).forEach(row => {
-  console.log(\`\${row.date}: close=\${row.close}\`);
-});`,
+const symbols = await fetch(\`\${BASE}/v1/stocks\`).then(r => r.json());
+console.log(\`Total symbols: \${symbols.count}\`);`,
   },
 ];
 

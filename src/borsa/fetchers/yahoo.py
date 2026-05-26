@@ -1,10 +1,13 @@
 from __future__ import annotations
+
 import asyncio
 import os
 import time
+from collections.abc import Callable
 from functools import partial
 from pathlib import Path
 from tempfile import gettempdir
+from typing import Any
 
 import structlog
 import yfinance as yf
@@ -83,11 +86,11 @@ class YahooFetcher:
             return None
 
 
-async def _run_sync(fn: partial) -> object:  # type: ignore[type-arg]
+async def _run_sync(fn: Callable[[], Any]) -> Any:
     return await asyncio.get_event_loop().run_in_executor(None, fn)
 
 
-def _download(ticker: str) -> object:
+def _download(ticker: str) -> Any:
     return yf.download(
         ticker,
         period="2d",

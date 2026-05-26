@@ -18,8 +18,8 @@ cp .env.example .env`,
     description:
       "Get free keys from Alpha Vantage and/or Finnhub. Yahoo Finance needs no key.",
     code: `# .env
-ALPHA_VANTAGE_API_KEY=your_key_here
-FINNHUB_API_KEY=your_key_here
+ALPHA_VANTAGE_KEY=your_key_here
+FINNHUB_KEY=your_key_here
 
 # Get free keys at:
 # → alphavantage.co/support/#api-key
@@ -37,7 +37,7 @@ FINNHUB_API_KEY=your_key_here
 uv sync && uv run uvicorn borsa.main:app --reload
 
 # Query it:
-curl http://localhost:8000/quotes/COMI`,
+curl http://localhost:8000/v1/quote/COMI`,
     lang: "bash",
   },
 ];

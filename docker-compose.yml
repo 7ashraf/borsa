@@ -1,5 +1,6 @@
 services:
   borsa:
+    image: ${BORSA_IMAGE:-ghcr.io/7ashraf/borsa:latest}
     build: .
     ports:
       - "8000:8000"

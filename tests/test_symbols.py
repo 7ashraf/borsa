@@ -1,5 +1,3 @@
-import pytest
-
 from borsa.data.symbols import (
     EGX_SYMBOLS,
     all_symbols,
@@ -36,7 +34,7 @@ def test_get_yahoo_ticker_unknown() -> None:
 
 def test_get_symbol_name_known() -> None:
     name = get_symbol_name("COMI")
-    assert name == "Commercial International Bank"
+    assert name == "Commercial International Bank Egypt (CIB) S.A.E."
 
 
 def test_all_symbols_returns_list() -> None:

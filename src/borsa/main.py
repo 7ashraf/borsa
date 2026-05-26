@@ -1,6 +1,8 @@
 from __future__ import annotations
+
 import asyncio
-from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager, suppress
 from datetime import date
 from typing import Annotated
 
@@ -59,6 +61,7 @@ async def _warm_quote_cache(svc: StocksService) -> None:
 
 # ── Rate limiter for /demo ────────────────────────────────────────────────────
 
+
 class _DemoRateLimiter:
     def __init__(self, daily_limit: int) -> None:
         self._limit = daily_limit
@@ -82,6 +85,7 @@ class _DemoRateLimiter:
 
 # ── Service factory ───────────────────────────────────────────────────────────
 
+
 def _build_fetchers(av_key: str, fh_key: str, enable_yahoo: bool) -> list[Fetcher]:
     """Build the fetcher chain: Yahoo → AV → Finnhub.
 
@@ -90,18 +94,19 @@ def _build_fetchers(av_key: str, fh_key: str, enable_yahoo: bool) -> list[Fetche
     """
     fetchers: list[Fetcher] = []
     if enable_yahoo:
-        fetchers.append(YahooFetcher())  # type: ignore[arg-type]
+        fetchers.append(YahooFetcher())
     if av_key:
-        fetchers.append(AlphaVantageFetcher(av_key))  # type: ignore[arg-type]
+        fetchers.append(AlphaVantageFetcher(av_key))
     if fh_key:
-        fetchers.append(FinnhubFetcher(fh_key))  # type: ignore[arg-type]
+        fetchers.append(FinnhubFetcher(fh_key))
     return fetchers
 
 
 # ── Lifespan ──────────────────────────────────────────────────────────────────
 
+
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     configure_logging(settings.log_level, settings.dev_mode)
     log.info("borsa_starting", version=__version__)
 
@@ -152,10 +157,8 @@ async def lifespan(app: FastAPI):
     for task in app.state.quote_refresh_tasks:
         task.cancel()
     for task in app.state.quote_refresh_tasks:
-        try:
+        with suppress(asyncio.CancelledError):
             await task
-        except asyncio.CancelledError:
-            pass
 
     log.info("borsa_stopped")
 
@@ -174,12 +177,14 @@ app.add_middleware(RequestIDMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
+    allow_origin_regex=settings.cors_origin_regex,
     allow_methods=["GET", "DELETE"],
     allow_headers=["*"],
 )
 
 
 # ── Dependency providers ──────────────────────────────────────────────────────
+
 
 def get_stock_svc(request: Request) -> StocksService:
     return request.app.state.stock_svc  # type: ignore[no-any-return]

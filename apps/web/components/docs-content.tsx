@@ -5,87 +5,79 @@ import { SyntaxHighlight } from "./syntax-highlight";
 const ENDPOINTS = [
   {
     method: "GET",
-    path: "/health",
+    path: "/v1/health",
     desc: "Service health + provider status",
     response: `{
   "status": "ok",
-  "providers": {
-    "alpha_vantage": { "enabled": true, "has_key": true },
-    "finnhub": { "enabled": true, "has_key": true },
-    "yahoo": { "enabled": true, "has_key": false }
+  "version": "0.1.0",
+  "providers_configured": {
+    "yahoo": true,
+    "alpha_vantage": true,
+    "finnhub": true
   }
 }`,
   },
   {
     method: "GET",
-    path: "/symbols",
+    path: "/v1/stocks",
     desc: "List all pre-configured EGX symbols",
-    response: `[
-  { "symbol": "COMI", "name": "Commercial International Bank", "sector": "Financials" },
-  { "symbol": "CIBEA", "name": "CIB Egypt", "sector": "Financials" },
-  ...
-]`,
+    response: `{
+  "count": 223,
+  "symbols": [
+    { "symbol": "COMI", "name": "Commercial International Bank Egypt (CIB) S.A.E.", "sector": "Financials" }
+  ]
+}`,
   },
   {
     method: "GET",
-    path: "/quotes/{symbol}",
+    path: "/v1/quote/{symbol}",
     desc: "Real-time quote: price, OHLC, volume, change",
     response: `{
   "symbol": "COMI",
-  "name": "Commercial International Bank",
-  "price": 45.80,
-  "open": 45.20,
-  "high": 46.10,
-  "low": 45.00,
-  "previous_close": 45.50,
-  "change": 0.30,
-  "change_percent": 0.659,
-  "volume": 1234567,
+  "company": "Commercial International Bank Egypt (CIB) S.A.E.",
+  "price": 136.0,
+  "change": null,
+  "change_percent": null,
+  "volume": 3579806,
+  "high": 136.49,
+  "low": 132.5,
   "currency": "EGP",
-  "provider": "yahoo",
-  "fetched_at": "2025-05-24T10:30:00"
+  "source": "Yahoo Finance (COMI.CA)",
+  "api_symbol": "COMI.CA"
 }`,
   },
   {
     method: "GET",
-    path: "/historical/{symbol}",
-    desc: "OHLCV history. Query params: interval=daily|weekly|monthly, period=1mo|3mo|6mo|1y",
-    response: `[
-  { "date": "2025-05-01", "open": 44.5, "high": 45.0, "low": 44.2, "close": 44.8, "volume": 987654 },
-  { "date": "2025-05-02", "open": 44.8, "high": 46.2, "low": 44.7, "close": 45.80, "volume": 1234567 }
-]`,
+    path: "/v1/quotes/batch?symbols=COMI,ETEL",
+    desc: "Fetch several quotes in one request",
+    response: `{
+  "results": [],
+  "failed": []
+}`,
   },
   {
     method: "GET",
-    path: "/company/{symbol}",
-    desc: "Company fundamentals and metadata",
+    path: "/demo/quote/{symbol}",
+    desc: "Public demo quote endpoint with a global daily request limit",
     response: `{
   "symbol": "COMI",
-  "name": "Commercial International Bank Egypt",
-  "sector": "Financials",
-  "industry": "Banks",
-  "country": "Egypt",
+  "company": "Commercial International Bank Egypt (CIB) S.A.E.",
+  "price": 136.0,
   "currency": "EGP",
-  "market_cap": null,
-  "description": "..."
+  "source": "Yahoo Finance (COMI.CA)"
 }`,
-  },
-  {
-    method: "DELETE",
-    path: "/cache",
-    desc: "Flush the in-process cache",
-    response: `{ "message": "Cache cleared", "entries_removed": 42 }`,
   },
 ];
 
 const ENV_VARS = [
-  { name: "ALPHA_VANTAGE_API_KEY", default: "_(empty)_", desc: "Alpha Vantage key — provider disabled if empty" },
-  { name: "FINNHUB_API_KEY", default: "_(empty)_", desc: "Finnhub key — provider disabled if empty" },
-  { name: "ENABLE_ALPHA_VANTAGE", default: "true", desc: "Feature flag to disable Alpha Vantage entirely" },
-  { name: "ENABLE_FINNHUB", default: "true", desc: "Feature flag to disable Finnhub entirely" },
-  { name: "ENABLE_YAHOO", default: "true", desc: "Yahoo Finance requires no key" },
-  { name: "CACHE_TTL_SECONDS", default: "60", desc: "Seconds before a cached response expires" },
+  { name: "ALPHA_VANTAGE_KEY", default: "_(empty)_", desc: "Alpha Vantage key — provider disabled if empty" },
+  { name: "FINNHUB_KEY", default: "_(empty)_", desc: "Finnhub key — provider disabled if empty" },
+  { name: "DEMO_ALPHA_VANTAGE_KEY", default: "_(empty)_", desc: "Operator key used by /demo endpoints" },
+  { name: "DEMO_FINNHUB_KEY", default: "_(empty)_", desc: "Operator key used by /demo endpoints" },
+  { name: "ENABLE_YAHOO_FINANCE", default: "false", desc: "Enable unofficial Yahoo Finance/yfinance fetching" },
+  { name: "CACHE_TTL_SECONDS", default: "300", desc: "Seconds before a cached response expires" },
   { name: "CACHE_MAX_SIZE", default: "512", desc: "Maximum entries in the in-process cache" },
+  { name: "CORS_ORIGINS", default: "*", desc: "Comma-separated browser origins allowed to call the API" },
   { name: "HOST", default: "0.0.0.0", desc: "Bind address" },
   { name: "PORT", default: "8000", desc: "Bind port" },
   { name: "LOG_LEVEL", default: "info", desc: "debug · info · warning · error" },
@@ -252,7 +244,7 @@ docker compose up`}
               <code className="font-mono text-xs bg-[var(--muted)] px-1.5 py-0.5 rounded">
                 StocksService
               </code>{" "}
-              tries providers in order: Alpha Vantage → Finnhub → Yahoo Finance.
+              tries providers in order: Yahoo Finance → Alpha Vantage → Finnhub.
               A provider is skipped if its key is absent or its feature flag is{" "}
               <code className="font-mono text-xs bg-[var(--muted)] px-1.5 py-0.5 rounded">
                 false
@@ -285,7 +277,7 @@ docker compose up`}
               15+ EGX symbols pre-configured with provider-specific ticker
               mappings. Use{" "}
               <code className="font-mono text-xs bg-[var(--muted)] px-1.5 py-0.5 rounded">
-                GET /symbols
+                GET /v1/stocks
               </code>{" "}
               for the full list at runtime, or see the symbol dictionary in the
               source.

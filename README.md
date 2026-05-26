@@ -39,6 +39,7 @@ curl http://localhost:8000/v1/quote/COMI
 ```
 
 The API runs at `http://localhost:8000`. Interactive docs are at `http://localhost:8000/docs`.
+Published Docker images are available at `ghcr.io/7ashraf/borsa:latest`.
 
 <details>
 <summary><b>Example response</b></summary>

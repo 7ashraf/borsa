@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from datetime import datetime
 from typing import Any
 
@@ -27,8 +28,8 @@ class QuoteData(BaseModel):
     high: float | None = None
     low: float | None = None
     currency: str = "EGP"
-    source: str           # e.g. "Alpha Vantage (CIBEA.EGX)"
-    api_symbol: str       # the ticker format that actually returned data
+    source: str  # e.g. "Alpha Vantage (CIBEA.EGX)"
+    api_symbol: str  # the ticker format that actually returned data
     fetch_duration: float
     timestamp: datetime = Field(default_factory=datetime.utcnow)
     attribution: Attribution

@@ -1,5 +1,10 @@
 from __future__ import annotations
-from pydantic_settings import BaseSettings, SettingsConfigDict
+
+import json
+from typing import Annotated, Any
+
+from pydantic import field_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -15,7 +20,7 @@ class Settings(BaseSettings):
 
     # Logging
     log_level: str = "info"
-    dev_mode: bool = False   # pretty console output when True
+    dev_mode: bool = False  # pretty console output when True
 
     # Cache
     cache_ttl_seconds: int = 300
@@ -29,7 +34,18 @@ class Settings(BaseSettings):
     demo_daily_limit: int = 50
 
     # CORS
-    cors_origins: list[str] = ["*"]
+    cors_origins: Annotated[list[str], NoDecode] = ["*"]
+    cors_origin_regex: str | None = None
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, value: Any) -> Any:
+        if isinstance(value, str):
+            value = value.strip()
+            if value.startswith("["):
+                return json.loads(value)
+            return [origin.strip() for origin in value.split(",") if origin.strip()]
+        return value
 
     # Server
     host: str = "0.0.0.0"

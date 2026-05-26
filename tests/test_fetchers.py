@@ -1,9 +1,6 @@
 """Per-fetcher unit tests using respx to mock httpx calls."""
 
-import json
-
 import httpx
-import pytest
 import respx
 
 from borsa.fetchers.alpha_vantage import AlphaVantageFetcher
@@ -63,9 +60,7 @@ async def test_alpha_vantage_returns_none_on_error_message() -> None:
 
 @respx.mock
 async def test_alpha_vantage_returns_none_on_http_error() -> None:
-    respx.get("https://www.alphavantage.co/query").mock(
-        return_value=httpx.Response(500)
-    )
+    respx.get("https://www.alphavantage.co/query").mock(return_value=httpx.Response(500))
     fetcher = AlphaVantageFetcher(api_key="testkey")
     result = await fetcher.fetch_quote("CIBEA")
     assert result is None
@@ -101,9 +96,7 @@ async def test_finnhub_returns_none_on_zero_price() -> None:
 
 @respx.mock
 async def test_finnhub_returns_none_on_403() -> None:
-    respx.get("https://finnhub.io/api/v1/quote").mock(
-        return_value=httpx.Response(403)
-    )
+    respx.get("https://finnhub.io/api/v1/quote").mock(return_value=httpx.Response(403))
     fetcher = FinnhubFetcher(api_key="testkey")
     result = await fetcher.fetch_quote("CIBEA")
     assert result is None

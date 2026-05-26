@@ -1,7 +1,8 @@
 from __future__ import annotations
+
 import asyncio
 from collections.abc import Callable, Coroutine
-from typing import Any, TypeVar
+from typing import Any, TypeVar, cast
 
 import structlog
 from cachetools import TTLCache
@@ -29,7 +30,7 @@ class TTLCacheService:
             if key in self._cache:
                 self._hits += 1
                 log.debug("cache_hit", key=key)
-                return self._cache[key]  # type: ignore[return-value]
+                return cast(T, self._cache[key])
 
         result = await fn()
 

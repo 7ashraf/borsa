@@ -7,14 +7,14 @@ import { GithubIcon } from "./icons";
 const GITHUB_URL = "https://github.com/omarelsergany/borsa";
 
 const TERMINAL_LINES = [
-  { delay: 0, text: "$ curl https://api.borsa.ashh.me/quotes/COMI", type: "cmd" },
+  { delay: 0, text: "$ curl https://demo.borsa.ashh.me/demo/quote/COMI", type: "cmd" },
   { delay: 900, text: "{", type: "json" },
   { delay: 1100, text: '  "symbol": "COMI",', type: "json" },
-  { delay: 1200, text: '  "name": "Commercial Intl Bank",', type: "json" },
-  { delay: 1300, text: '  "price": 45.80,', type: "json" },
-  { delay: 1400, text: '  "change_percent": 0.659,', type: "json" },
+  { delay: 1200, text: '  "company": "Commercial International Bank Egypt",', type: "json" },
+  { delay: 1300, text: '  "price": 136.0,', type: "json" },
+  { delay: 1400, text: '  "source": "Yahoo Finance (COMI.CA)",', type: "json" },
   { delay: 1500, text: '  "currency": "EGP",', type: "json" },
-  { delay: 1600, text: '  "provider": "yahoo"', type: "json" },
+  { delay: 1600, text: '  "api_symbol": "COMI.CA"', type: "json" },
   { delay: 1700, text: "}", type: "json" },
 ];
 

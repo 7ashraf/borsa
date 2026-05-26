@@ -1,12 +1,14 @@
 from __future__ import annotations
+
 import asyncio
-from datetime import datetime
 import time
+from datetime import datetime
+from functools import partial
 
 import structlog
 from fastapi import HTTPException, status
 
-from borsa.data.symbols import EGX_SYMBOLS, get_symbol_name, is_valid_symbol
+from borsa.data.symbols import EGX_SYMBOLS, is_valid_symbol
 from borsa.exceptions import AllFetchersFailed, SymbolNotFoundError
 from borsa.fetchers.base import Fetcher
 from borsa.models import (
@@ -27,8 +29,7 @@ class StocksService:
         self._cache = cache
         self._start_time = datetime.utcnow()
         self._stats: dict[str, dict[str, int]] = {
-            f.name: {"requests": 0, "successes": 0, "failures": 0}
-            for f in fetchers
+            f.name: {"requests": 0, "successes": 0, "failures": 0} for f in fetchers
         }
         self._bulk_fetch_lock = asyncio.Lock()
         self._bulk_failure_until: dict[str, float] = {}
@@ -57,18 +58,15 @@ class StocksService:
     async def _get_all_quotes_unlocked(self) -> list[QuoteData]:
         now = time.monotonic()
         symbols = [
-            symbol
-            for symbol in EGX_SYMBOLS
-            if self._bulk_failure_until.get(symbol, 0) <= now
+            symbol for symbol in EGX_SYMBOLS if self._bulk_failure_until.get(symbol, 0) <= now
         ]
         tasks = [
-            self._cache.get_or_set(f"quote:{s}", lambda s=s: self._fetch_quote(s))
-            for s in symbols
+            self._cache.get_or_set(f"quote:{s}", partial(self._fetch_quote, s)) for s in symbols
         ]
         raw = await asyncio.gather(*tasks, return_exceptions=True)
         results: list[QuoteData] = []
         failure_ttl = int(self._cache.stats()["ttl"])
-        for symbol, result in zip(symbols, raw):
+        for symbol, result in zip(symbols, raw, strict=True):
             if isinstance(result, QuoteData):
                 results.append(result)
                 self._bulk_failure_until.pop(symbol, None)
@@ -92,14 +90,11 @@ class StocksService:
             sym = s.upper().strip()
             (valid if is_valid_symbol(sym) else failed).append(sym)
 
-        tasks = [
-            self._cache.get_or_set(f"quote:{s}", lambda s=s: self._fetch_quote(s))
-            for s in valid
-        ]
+        tasks = [self._cache.get_or_set(f"quote:{s}", partial(self._fetch_quote, s)) for s in valid]
         raw = await asyncio.gather(*tasks, return_exceptions=True)
 
         results: list[QuoteData] = []
-        for sym, r in zip(valid, raw):
+        for sym, r in zip(valid, raw, strict=True):
             if isinstance(r, QuoteData):
                 results.append(r)
             else:
@@ -137,10 +132,7 @@ class StocksService:
         return {f.name: True for f in self._fetchers}
 
     def provider_stats(self) -> dict[str, ProviderStats]:
-        return {
-            name: ProviderStats(**counts)
-            for name, counts in self._stats.items()
-        }
+        return {name: ProviderStats(**counts) for name, counts in self._stats.items()}
 
     def uptime_seconds(self) -> float:
         return (datetime.utcnow() - self._start_time).total_seconds()
@@ -164,7 +156,12 @@ class StocksService:
                 errors.append(f"{fetcher.name}: no data returned")
             except Exception as exc:
                 self._stats[fetcher.name]["failures"] += 1
-                log.warning("fetcher_exception", provider=fetcher.name, symbol=symbol, error=str(exc))
+                log.warning(
+                    "fetcher_exception",
+                    provider=fetcher.name,
+                    symbol=symbol,
+                    error=str(exc),
+                )
                 errors.append(f"{fetcher.name}: {exc}")
 
         raise AllFetchersFailed(symbol, errors)
